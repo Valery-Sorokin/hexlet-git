@@ -1,12 +1,16 @@
+updated: **20241127** - <mark>19.45</mark>
+
 ### Testing your SSH connection
 
 1. Open Terminal
+
 2. Enter the following:
    
    ```bash
    ssh -T git@github.com
    # Attempts to ssh to GitHub
    ```
+
 3. You may see a warning like this:
    
    > The authenticity of host 'github.com (IP ADDRESS)' can't be established.
@@ -68,5 +72,3 @@ SSH - `git@github.com:Valery-Sorokin/hexlet-git.git`
 ```bash
 git remote set-url origin git remote set-url origin git@github.com:Valery-Sorokin/hexlet-git.git
 ```
-
-
