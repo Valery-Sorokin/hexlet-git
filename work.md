@@ -1,5 +1,13 @@
-updated: **20241127** - <mark>20.20</mark>
-key: value
+---
+date: **2024-11-27**T<mark>22:57:00</mark>Z  # Дата - время последнего изменения
+
+key: value  
+
+---
+
+# hexlet-git.git
+
+
 
 ### Testing your SSH connection
 
