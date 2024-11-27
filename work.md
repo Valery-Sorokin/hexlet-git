@@ -1,9 +1,5 @@
----
-
 updated: **20241127** - <mark>20.20</mark>
 key: value
-
----
 
 ### Testing your SSH connection
 
