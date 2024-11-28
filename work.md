@@ -28,10 +28,19 @@ date: 2024-11-28T13:55:00Z  # Дата - время последнего изм�
 ## Установка глобальных переменных
 
 ```bash
-git config --global user.name "John Doe"
+# --global   использовать глобальный файл конфигурации
+# --system   использовать системный файл конфигурации
+# --local    использовать файл конфигурации репозитоgit config --global user.name "John Doe"
+git config --global user.name "Valery Sorokin"
 git config --global user.email johndoe@example.com
 git config --global init.defaultBranch main
-git config --global core.editor "code --wait"
+# Глобальные параметры для окончаний строк
+# git config --global core.autocrlf true # Для Windows параметр true
+git config --global core.autocrlf input # Для Linux input
+git config --global core.editor "code --wait" # Visual Studio Code
+git config --global -e # Открыть .gitconfig в редакторе по умолчанию
+git config --global --list --show-origin #S how Git Config in the Command Line/
+# --show-origin    показать источник настройки
 ```
 
 ## Как добавить репозиторий
