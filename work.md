@@ -261,12 +261,12 @@ Changes not staged for commit:
     modified:   INFO.md
 ```
 
-## Отмена коммитов — Введение в Git
+## Отмена коммитов
 
 - [Git revert](https://ru.hexlet.io/courses/intro_to_git/lessons/commits-cancelation/theory_unit#git-revert)
 - [Команда git reset](https://ru.hexlet.io/courses/intro_to_git/lessons/commits-cancelation/theory_unit#komanda-git-reset)
 
-### Git revert
+### Команда `git revert`
 
 Самая простая ситуация — отмена 
 изменений. Фактически она сводится к созданию еще одного коммита, 
@@ -325,15 +325,71 @@ git commit -m 'update INFO.md'
  1 file changed, 1 insertion(+)
  # Важно, что мы не делаем git push
 
-git reset --hard HEAD~
+git reset --hard HEAD~1
 
 HEAD is now at 65a8ef7 Revert "remove PEOPLE.md"
 
 # Если посмотреть `git log`, то последнего коммита там больше нет
 ```
 
-Флаг `--hard` означает полное удаление. Без него `git reset` отменит коммит, но не удалит его, а поместит все изменения этого 
-коммита в рабочую директорию, так что с ними можно будет продолжить 
-работать.
+Флаг `--hard` означает полное удаление. Без него `git reset` отменит коммит, но не удалит его, а поместит все изменения этого коммита в рабочую директорию, так что с ними можно будет продолжить работать.
 
 Флаг `HEAD~` означает «один коммит от последнего коммита». Обратите внимание, что здесь используется знак `~` — тильда. Его легко перепутать с дефисом `-`. Если бы мы хотели удалить два последних коммита, то могли бы написать `HEAD~2`:
+
+## Изменение последнего коммита
+
+Крайне часто разработчики делают коммит и сразу понимают, что забыли добавить часть файлов через `git add`. Оставшуюся часть изменений можно дослать следующим коммитом.
+
+Есть  еще один способ. Если изменения еще не были отправлены во внешнюю 
+систему, можно добавить изменения в текущий коммит. Для этого во время 
+коммита добавляется флаг `--amend`:
+
+```bash
+echo 'experiment with amend' >> INFO.md
+echo 'experiment with amend' >> README.md
+git add INFO.md
+# Забыли сделать подготовку README.md к коммиту
+git commit -m 'add content to INFO.md and README.md'
+
+[main 256de25] add content to INFO.md and README.md
+ 1 file changed, 1 insertion(+)
+
+git status
+
+On branch main
+Your branch is ahead of 'origin/main' by 1 commit.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+    modified:   README.md
+
+# Увидели, что забыли добавить файл
+# Добавляем
+
+git add README.md
+git commit --amend
+# После этой команды откроется редактор, ожидающий ввода описания коммита
+# Здесь можно поменять сообщение или выйти из редактора, оставив старое
+
+[main d96151a] add content to INFO.md and README.md
+ Date: Sat Sep 26 16:02:07 2020 -0400
+ 2 files changed, 2 insertions(+)
+
+git status
+
+On branch main
+Your branch is ahead of 'origin/main' by 1 commit.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+```
+
+В реальности `--amend` не добавляет изменения в существующий коммит. Этот флаг приводит к откату коммита через `git reset` и выполнению нового коммита с новыми данными. Поэтому мы и видим ровно один коммит, хотя команда `git commit` выполнялась два раза (первый раз — когда сделали ошибочный коммит).
+
+Чтобы не открывался редактор для ввода описания коммита к команде `git commit --amend` можно добавить опцию `--no-edit`. В этом случае описание коммита не изменится
+
+```bash
+git commit --amend --no-edit
+```
