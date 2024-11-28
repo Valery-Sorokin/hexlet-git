@@ -1,6 +1,6 @@
 ---
-date: 2024-11-27T22:57:00Z  # Дата - время последнего изменения
-key: value  
+date: 2024-11-28T13:55:00Z  # Дата - время последнего изменения
+
 
 ---
 
@@ -251,3 +251,80 @@ Changes not staged for commit:
   (use "git restore <file>..." to discard changes in working directory)
     modified:   INFO.md
 ```
+
+## Отмена коммитов — Введение в Git
+
+- [Git revert](https://ru.hexlet.io/courses/intro_to_git/lessons/commits-cancelation/theory_unit#git-revert)
+- [Команда git reset](https://ru.hexlet.io/courses/intro_to_git/lessons/commits-cancelation/theory_unit#komanda-git-reset)
+
+### Git revert
+
+Самая простая ситуация — отмена 
+изменений. Фактически она сводится к созданию еще одного коммита, 
+который выполняет изменения, противоположные тому коммиту, который 
+отменяется:
+
+```bash
+# Этой команде нужен идентификатор коммита
+# Это коммит, которым мы удалили файл PEOPLE.md
+git revert aa600a43cb164408e4ad87d216bc679d097f1a6c
+# После этой команды откроется редактор, ожидающий ввода описания коммита
+# Обычно сообщение revert не меняют, поэтому достаточно просто закрыть редактор
+[main 65a8ef7] Revert "remove PEOPLE.md"
+ 1 file changed, 1 insertion(+)
+ create mode 100644 PEOPLE.md
+# В проект вернулся файл PEOPLE.md
+
+git log -p
+
+commit 65a8ef7fd56c7356dcee35c2d05b4400f4467ca8
+Author: tirion <tirion@got.com>
+Date:   Sat Sep 26 15:32:46 2020 -0400
+
+    Revert "remove PEOPLE.md"
+
+    This reverts commit aa600a43cb164408e4ad87d216bc679d097f1a6c.
+
+diff --git a/PEOPLE.md b/PEOPLE.md
+new file mode 100644
+index 0000000..4b34ba8
+--- /dev/null
++++ b/PEOPLE.md
+@@ -0,0 +1 @@
++Haskell Curry
+```
+
+### Команда `git reset`
+
+Git позволяет удалять коммиты. Это опасная операция, которую нужно 
+делать только в том случае, если речь идет про новые коммиты, которых 
+нет ни у кого, кроме вас.
+
+Если коммит был отправлен во внешний 
+репозиторий, например, на GitHub, то менять историю ни в коем случае 
+нельзя. Это сломает работу у тех, кто работает с вами над проектом.
+
+Для удаления коммита используется команда `git reset`:
+
+```bash
+# Добавляем новый коммит, который мы сразу же удалим
+echo 'test' >> INFO.md
+git add INFO.md
+git commit -m 'update INFO.md'
+
+[main 17a77cb] update INFO.md
+ 1 file changed, 1 insertion(+)
+ # Важно, что мы не делаем git push
+
+git reset --hard HEAD~
+
+HEAD is now at 65a8ef7 Revert "remove PEOPLE.md"
+
+# Если посмотреть `git log`, то последнего коммита там больше нет
+```
+
+Флаг `--hard` означает полное удаление. Без него `git reset` отменит коммит, но не удалит его, а поместит все изменения этого 
+коммита в рабочую директорию, так что с ними можно будет продолжить 
+работать.
+
+Флаг `HEAD~` означает «один коммит от последнего коммита». Обратите внимание, что здесь используется знак `~` — тильда. Его легко перепутать с дефисом `-`. Если бы мы хотели удалить два последних коммита, то могли бы написать `HEAD~2`:
