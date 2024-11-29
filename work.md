@@ -25,7 +25,7 @@ date: 2024-11-29T08:39:00Z  # Дата - время последнего изм�
 
 ***
 
-### Классный тренажер по git - Learn Git Branching
+## Классный тренажер по git - Learn Git Branching
 
 [Learn Git Branching](https://learngitbranching.js.org/?locale=ru_RU)
 
@@ -42,6 +42,14 @@ git config --global init.defaultBranch main
 # git config --global core.autocrlf true # Для Windows параметр true
 git config --global core.autocrlf input # Для Linux input
 git config --global core.editor "code --wait" # Visual Studio Code
+# Use VS Code as git default diff tool and merge tool
+git config --global diff.tool vscode
+git config --global difftool.vscode.cmd 'code --wait --diff $LOCAL $REMOTE'
+```
+
+## Просмотр и редактирование глобальных переменных
+
+```bash
 git config --global -e # Открыть .gitconfig в редакторе по умолчанию
 git config --global --list --show-origin #S how Git Config in the Command Line/
 # --show-origin    показать источник настройки
