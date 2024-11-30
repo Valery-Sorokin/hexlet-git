@@ -584,7 +584,140 @@ node_modules/
 doc/**/*.txt
 
 # Исключение временных и вторичных файлов и директорий
-#	*.log
-#	build/
-#	temp-*
+#    *.log
+#    build/
+#    temp-*
 ```
+
+## Stash - прячем файлы в рабочей директории
+
+В Git существует набор команд, позволяющий прятать изменения в рабочей 
+директории и восстанавливать их при необходимости. Попробуем:
+
+```bash
+touch FILE.md
+git add FILE.md
+git status
+
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+    new file:   FILE.md
+
+# Прячем файлы
+# После этой команды пропадут все измененные файлы
+# независимо от того, добавлены они в индекс или нет
+git stash
+
+Saved working directory and index state WIP on main: e7bb5e5 update README.md
+
+git status
+
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+```
+
+В данный момент вы можете легко переключать ветки и работать в любой; ваши изменения сохранены.
+Чтобы посмотреть список припрятанных изменений, вы можете использовать `git stash list`:
+
+```bash
+$ git stash list
+stash@{0}: WIP on master: 049d078 Create index file
+stash@{1}: WIP on master: c264051 Revert "Add file_size"
+stash@{2}: WIP on master: 21d80a5 Add number to log
+```
+
+В данном примере, предварительно были припрятаны два изменения, поэтому теперь вам доступны три различных отложенных наработки.
+Вы можете применить только что припрятанные изменения, используя команду, указанную в выводе исходной команды: `git stash apply`.
+Если вы хотите применить одно из предыдущих припрятанных изменений, вы можете сделать это, используя его имя, вот так: `git stash apply stash@{2}`.
+Если вы не укажете имя, то Git попытается восстановить самое последнее припрятанное изменение:
+
+После выполнения всех нужных изменений в чистой рабочей директории можно вернуть спрятанные изменения с помощью команды `git stash pop`:
+
+```bash
+# Восстанавливаем
+git stash pop
+
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+    new file:   FILE.md
+
+Dropped refs/stash@{0} (b896d4a0126ef4409ede63857e5d996953fe75c5)
+
+# Проверяем
+git status
+
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+    new file:   FILE.md
+```
+
+Файлы вернулись в том виде, в котором они попали в **стэш** (*stash*).
+
+Стэш в Git работает по принципу стека. Он позволяет сохранить внутрь любое количество изменений и восстановить их в обратном порядке:
+
+```bash
+git stash
+
+# Изменяем файлы
+git stash
+
+# Возвращаем последние изменения
+git stash pop
+
+# Возвращаем предпоследние изменения
+git stash pop
+```
+
+## Открытые проекты
+
+- [Клонирование](https://ru.hexlet.io/courses/intro_to_git/lessons/open-source/theory_unit#klonirovanie)
+- [Запрос на включение изменений кода](https://ru.hexlet.io/courses/intro_to_git/lessons/open-source/theory_unit#zapros-na-vklyuchenie-izmeneniy-koda)
+- [Исправления прямо на GitHub](https://ru.hexlet.io/courses/intro_to_git/lessons/open-source/theory_unit#ispravleniya-pryamo-na-github)
+
+Один из важнейших механизмов GitHub — запрос на включение изменений. Коротко его называют **пулреквест** (*pull request*). Именно этот механизм позволяет легко и непринужденно вливаться в разработку любых проектов.
+
+### Клонирование
+
+Первым шагом создаем копию репозитория в своем аккаунте. Делается это буквально одной кнопкой *Fork* на странице репозитория:
+
+![Кнопка Fork](https://cdn2.hexlet.io/derivations/image/original/eyJpZCI6IjY1OGFkN2RkN2QwZmU4ODUxNTM0NmVlODZlNjU1NWQzLnBuZyIsInN0b3JhZ2UiOiJjYWNoZSJ9?signature=12dd94f35b42a963591e9f61e1a2aa6140659ab0814a315d5a4ca56f4fa40975)
+
+После этого действия в вашем аккаунте окажется репозиторий с таким же именем.
+GitHub знает, что это копия оригинального репозитория, и помечает его особым образом.
+
+Дальше все как обычно. Мы клонируем репозиторий на компьютер и производим необходимые изменения. Хорошей практикой считается делать изменения в отдельной ветке, созданной от ветки main.
+
+### Запрос на включение изменений кода
+
+После того как мы залили изменения на GitHub, в его интерфейсе 
+произойдут изменения. На странице склонированного репозитория появится 
+кнопка **Pull request**:
+
+![Кнопка Pull request](https://cdn2.hexlet.io/derivations/image/original/eyJpZCI6IjEzYWJjNGRjMmZmNzA1MDkzZTY4YTk1OTAwZjVmODUwLnBuZyIsInN0b3JhZ2UiOiJjYWNoZSJ9?signature=4c6086476383e467d3b47aa047e4147842acc11a565f7d7f06fb888a4980e234)
+
+Если ее нажать, то откроется страница, на которой можно указать название пулреквеста и его описание.
+
+После отправки пулреквеста в оригинальном репозитории на странице **Pull requests** отобразится ваш запрос. Теперь остается ждать, когда разработчики библиотеки рассмотрят пулреквест. В итоге они:
+
+- Либо примут реквест
+- Либо отклонят его
+- Либо зададут уточняющие вопросы и предложат доработать реквест
+
+### Исправления прямо на GitHub
+
+В более простых ситуациях, когда достаточно исправить текст или опечатку, **GitHub** позволяет сделать пулреквест прямо из своего интерфейса.
+
+Для этого достаточно открыть любой файл проекта и нажать на иконку редактирования. После завершения редактирования GitHub сам предложит создать пулреквест с этим изменением.
+
+---
