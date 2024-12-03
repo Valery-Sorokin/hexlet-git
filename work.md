@@ -51,7 +51,7 @@ git config --global difftool.vscode.cmd 'code --wait --diff $LOCAL $REMOTE'
 
 ```bash
 git config --global -e # Открыть .gitconfig в редакторе по умолчанию
-git config --global --list --show-origin #S how Git Config in the Command Line/
+git config --global --list --show-origin #Show Git Config in the Command Line/
 # --show-origin    показать источник настройки
 ```
 
