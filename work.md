@@ -1,7 +1,7 @@
 ---
 date: 2024-12-04T10:00:00Z  # Дата - время последнего изменения
 
----[^name]
+---
 
 # hexlet-git.git
 
@@ -57,16 +57,25 @@ git config --global --list --show-origin #Show Git Config in the Command Line/
 ## Как добавить репозиторий
 
 ```bash
-git remote add origin git@github.com:Valery-Sorokin/hexlet-git.git
+git remote add origin git@github.com:bosseleven/hexlet-git.git
 git branch -M main
 git push -u origin main
+```
+
+## Как обновить имя репозитория при смене имени профиля на Гитхаб
+
+```bash
+git remote set-url origin git@github.com:bosseleven/hexlet-git.git
+# git@github.com:bosseleven/hexlet-git.git
+# git@github.com:bosseleven/destyle.by.git
+# git@github.com:bosseleven/KevinCookieCompany.com.git
 ```
 
 ## Как клонировать репозиторий
 
 ```bash
-git clone git@github.com:Valery-Sorokin/hexlet-git.git
-cd hexlet-git
+git clone git@github.com:bosseleven/destyle.by.git
+cd destyle.by
 ls -la
 ```
 
@@ -215,7 +224,7 @@ Untracked files:
     two
 
 # Выполняем очистку. Команда удалит все неотслеживаемые файлы
-# -f – force, -d – directory
+# -f – force, -d – directory
 git clean -fd
 
 Removing one/
@@ -651,6 +660,7 @@ Changes to be committed:
 Dropped refs/stash@{0} (b896d4a0126ef4409ede63857e5d996953fe75c5)
 
 # Проверяем
+
 git status
 
 On branch main
